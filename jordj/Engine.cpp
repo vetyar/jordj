@@ -41,7 +41,8 @@ Engine::Engine()
     map.loadFromImage(map_image);//заряжаем текстуру картинкой
     
     s_map.setTexture(map);//заливаем текстуру спрайтом
-    
+    G.Win = true;
+    G.loop = false;
 }
 
 void Engine::start()
@@ -49,39 +50,47 @@ void Engine::start()
     // Расчет времени
     Clock clock;
     
-    while (m_Window.isOpen() && G.Win == true)
+    while (m_Window.isOpen() )
     {
-        sf::Event event;
-        while (m_Window.pollEvent(event))
+        if (G.Win == true)
         {
-          // "close requested" event: we close the window
-          if (event.type == sf::Event::Closed)
-            m_Window.close();
-          if (event.type == sf::Event::Resized)
-          {
-         
+            sf::Event event;
+            while (m_Window.pollEvent(event))
+            {
+                // "close requested" event: we close the window
+                if (event.type == sf::Event::Closed)
+                    m_Window.close();
+                if (event.type == sf::Event::Resized)
+                {
 
-            float partX = event.size.width * 1.0 / lastSize.x;
-            float partY = event.size.height * 1.0 / lastSize.y;
 
-            view.setSize(event.size.width, event.size.height);
+                    float partX = event.size.width * 1.0 / lastSize.x;
+                    float partY = event.size.height * 1.0 / lastSize.y;
 
-            view.setViewport(sf::FloatRect(0, 0, 1, 1));
-            m_Window.setView(view);
-          }
+                    view.setSize(event.size.width, event.size.height);
+
+                    view.setViewport(sf::FloatRect(0, 0, 1, 1));
+                    m_Window.setView(view);
+                }
+            }
+            // Перезапускаем таймер и записываем отмеренное время в dt
+            Time dt = clock.restart();
+
+            float dtAsSeconds = dt.asSeconds();
+
+            input();
+            G.Position();
+            draw();
         }
-        // Перезапускаем таймер и записываем отмеренное время в dt
-        Time dt = clock.restart();
-        
-        float dtAsSeconds = dt.asSeconds();
-
-        input();
-        G.Position();
-        draw();
+        else
+        {
+            G.Looser();
+            l = 0;
+        }
         
     }
     
-    m_Window.clear(Color::Red);
+   
 } 
 void Engine::input()
 {
@@ -150,18 +159,22 @@ void Engine::input()
             timerkey.restart();
             nowBobSteps++;
         }
-        else
+        if (Keyboard::isKeyPressed(Keyboard::R) && dtime > 0.3)//reboot
         {
-
+            G.Looser();
+            l = 0;
         }
     }
     else
     {
 
         
-        if (G.rem_pos.size()  > l && dtime > 0.5 )
+        if (G.rem_pos.size()  > l && dtime > 0.25 )
         {
-            G.Loop(l);
+            if (G.rem_pos.size() != 0)
+            {
+                G.Loop(l);
+            }
             l++;
             timerkey.restart();
         }
@@ -170,22 +183,29 @@ void Engine::input()
             l = 0;
       
         }
+        if (Keyboard::isKeyPressed(Keyboard::R) && dtime > 0.3)
+        {
+            G.Looser();
+            l = 0;
+        }
     }
 
 }
  void Engine::Background()
 {
     for (int i = 0; i < HEIGHT_MAP; i++)
+    {
         for (int j = 0; j < WIDTH_MAP; j++)
         {
-            if (G.table[i][j] == 1)  s_map.setTextureRect(IntRect(0, 0, 64, 64)); //ПУСТОТА
-            if (G.table[i][j] == 0)  s_map.setTextureRect(IntRect(64, 0, 64, 64));//можно ходить
-            if ((G.table[i][j] == 2)) s_map.setTextureRect(IntRect(128, 0, 64, 64));//зеленая хрень
-
+            if (G.tabledraw[i][j] == 1)  s_map.setTextureRect(IntRect(0, 0, 64, 64)); //ПУСТОТА
+            if (G.tabledraw[i][j] == 0)  s_map.setTextureRect(IntRect(64, 0, 64, 64));//можно ходить
+            if ((G.tabledraw[i][j] == 2)) s_map.setTextureRect(IntRect(128, 0, 64, 64));//зеленая хрень
+            if ((G.tabledraw[i][j] == 3)) s_map.setTextureRect(IntRect(128+64, 0, 64, 64));//3d
 
             s_map.setPosition(j * 64, i * 64);
            m_Window.draw(s_map);//рисуем квадратики на экран
         }
+    }
    
 }
 

@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include <iostream>
 #include <vector>
+#include "Game.h"
 
 
 
@@ -9,10 +10,16 @@ int main()
    
     
     // Объявляем экземпляр класса Engine
-    Engine engine;
+    
     
     // Вызываем функцию start
-    engine.start();
+
+        Engine engine;
+        engine.start();
+   
+        
+
+    
 
     
     // Останавливаем программу программу, когда движок остановлен

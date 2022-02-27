@@ -1,5 +1,5 @@
 #include "Game.h"
-#include <iostream>;
+#include <iostream>
 using namespace std;
 using namespace sf;
 Game::Game()
@@ -11,7 +11,7 @@ Game::Game()
 		square = 64;
 		def_pos.x = (bob_table_position.x - 1) * square ;
 		def_pos.y = (bob_table_position.y-1)*square;
-		
+		loop = false;
 }
 Sprite Game::getSprite()
 {
@@ -26,16 +26,23 @@ void Game::Leftkey()
 	}
 	else
 	{
-		bob_table_position.x -= 1;
-		Rem_Pos("Left");
+		
 		if (loop == false && table[bob_table_position.y][bob_table_position.x - 1] == 0)
 		{
-			rem_pos.push_back("Left");
-		}
-		if (table[bob_table_position.y ][bob_table_position.x-1] == 0)
-		{
 			loop = true;
+			
 		}
+		if (loop == true && table[bob_table_position.y][bob_table_position.x - 1] == 2)
+		{
+			loop = false;
+			
+			
+		}
+		Rem_Pos("Left");
+		bob_table_position.x -= 1;
+		
+		
+		
 		
 	}
 	//table[bob_table_position.x][bob_table_position.y] = -1;
@@ -43,6 +50,7 @@ void Game::Leftkey()
 
 void Game::Rightkey()
 {
+	
 	//table[bob_table_position.x][bob_table_position.y] = 0;
 	if (table[bob_table_position.y][bob_table_position.x+1] == 1)
 	{
@@ -50,17 +58,21 @@ void Game::Rightkey()
 	}
 	else
 	{
-		bob_table_position.x += 1;
-		//if(table[bob_table_position.y][bob_table_position.x - 1] != 0) //Эту строку можно использовать для того чтобы фиксить баг при входе в другу. зеленую область
 		Rem_Pos("Right");
-		if (loop == false && table[bob_table_position.y][bob_table_position.x + 1] == 0)
-		{
-			rem_pos.push_back("Right");
-		}
-		if (table[bob_table_position.y][bob_table_position.x + 1] == 0)
+		if (loop==false && table[bob_table_position.y][bob_table_position.x + 1] == 0)
 		{
 			loop = true;
+			cout << 1;
 		}
+		if (loop == true && table[bob_table_position.y][bob_table_position.x + 1] == 2)
+		{
+			loop = false;
+			
+
+			cout << 2;
+		}
+		
+		bob_table_position.x += 1;
 		
 	}
 	//table[bob_table_position.x][bob_table_position.y] = -1;
@@ -75,16 +87,19 @@ void Game::Upkey()
 	}
 	else
 	{
-		bob_table_position.y -= 1;
+		
 		Rem_Pos("Up");
 		if (loop == false && table[bob_table_position.y - 1][bob_table_position.x] == 0)
 		{
-			rem_pos.push_back("Up");
-		}
-		if (table[bob_table_position.y-1][bob_table_position.x] == 0)
-		{
 			loop = true;
 		}
+		if (loop == true && table[bob_table_position.y-1][bob_table_position.x] == 2)
+		{
+			loop = false;
+			
+		}
+		bob_table_position.y -= 1;
+		
 		
 	}
 	//table[bob_table_position.x][bob_table_position.y] = -1;
@@ -99,16 +114,19 @@ void Game::Downkey()
 	}
 	else
 	{
-		bob_table_position.y += 1;
+		//bob_table_position.y += 1;
 		Rem_Pos("Down");
 		if (loop == false && table[bob_table_position.y + 1][bob_table_position.x] == 0)
 		{
-			rem_pos.push_back("Down");//для добавление последнего хода
-		}
-		if (table[bob_table_position.y + 1][bob_table_position.x] == 0)
-		{
 			loop = true;
 		}
+		if (loop == true && table[bob_table_position.y + 1][bob_table_position.x] == 2)
+		{
+			loop = false;
+			
+		}
+		bob_table_position.y += 1;
+		
 		
 		
 	}
@@ -128,13 +146,12 @@ void Game::Position()
 	 if (table[bob_table_position.y][bob_table_position.x] == 2)
 	 {
 		 rem_pos.push_back(x);
-
-		 cout << rem_pos[k] << " ";
-		 k++;
 	 }
 }
  void Game::Loop(int l)
  {
+	 if(rem_pos.size()!=0)
+	 { 
 	 if (rem_pos[l] == "Up")
 	 {
 		 Upkey();
@@ -152,7 +169,17 @@ void Game::Position()
 	 {
 		 Leftkey();
 	 }
+	 }
 
  }
+ void Game:: Looser()
+ {
+	 bob_table_position.x = 1;
+	 bob_table_position.y = 3;
+	 rem_pos.clear();
+	 Win = true;
+	 loop = false;
+	 
 
+ }
 

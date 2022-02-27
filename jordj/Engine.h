@@ -38,7 +38,7 @@ public:
     int nowBobSteps;
     // Функция старт вызовет все приватные функции
     void start();
-    const int HEIGHT_MAP = 6;//размер карты высота
+    const int HEIGHT_MAP = 7;//размер карты высота
     const int WIDTH_MAP = 18;//размер карты ширина 
     Game G;
     
