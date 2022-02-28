@@ -5,22 +5,22 @@
 using namespace std;
 Engine::Engine()
 {
-   
+
     // Получаем разрешение экрана, создаем окно SFML и View
     Vector2f resolution;
     resolution.x = VideoMode::getDesktopMode().width;
     resolution.y = VideoMode::getDesktopMode().height;
 
- 
+
 
     m_Window.create(VideoMode(resolution.x, resolution.y),
-        "Simple Game Engine"/*,
-        Style::Fullscreen*/);
+        "Simple Game Engine",
+        Style::Fullscreen);
 
 
     lastSize = m_Window.getSize();
 
-    view = sf::View(sf::FloatRect(0, 0, m_Window.getSize().x/1.5, m_Window.getSize().y/1.5));
+    view = sf::View(sf::FloatRect(0, 0, m_Window.getSize().x , m_Window.getSize().y ));
     view.setViewport(sf::FloatRect(0, 0, 1, 1));
 
     m_Window.setView(view);
@@ -37,9 +37,9 @@ Engine::Engine()
     /////////////////////////////////////////////////////////////////
     //объект изображения для карты
     map_image.loadFromFile("map.png");//загружаем файл для карты
-    
+
     map.loadFromImage(map_image);//заряжаем текстуру картинкой
-    
+
     s_map.setTexture(map);//заливаем текстуру спрайтом
     G.Win = true;
     G.loop = false;
@@ -49,8 +49,8 @@ void Engine::start()
 {
     // Расчет времени
     Clock clock;
-    
-    while (m_Window.isOpen() )
+
+    while (m_Window.isOpen())
     {
         if (G.Win == true)
         {
@@ -87,14 +87,14 @@ void Engine::start()
             G.Looser();
             l = 0;
         }
-        
+
     }
-    
-   
-} 
+
+
+}
 void Engine::input()
 {
-    
+
     float dtime = timerkey.getElapsedTime().asSeconds();
     // Обрабатываем нажатие Escape
     if (Keyboard::isKeyPressed(Keyboard::Escape))
@@ -168,8 +168,8 @@ void Engine::input()
     else
     {
 
-        
-        if (G.rem_pos.size()  > l && dtime > 0.25 )
+
+        if (G.rem_pos.size() > l && dtime > 0.25)
         {
             if (G.rem_pos.size() != 0)
             {
@@ -178,10 +178,10 @@ void Engine::input()
             l++;
             timerkey.restart();
         }
-        if(G.rem_pos.size()  == l )
+        if (G.rem_pos.size() <= l)
         {
             l = 0;
-      
+
         }
         if (Keyboard::isKeyPressed(Keyboard::R) && dtime > 0.3)
         {
@@ -191,21 +191,21 @@ void Engine::input()
     }
 
 }
- void Engine::Background()
+void Engine::Background()
 {
     for (int i = 0; i < HEIGHT_MAP; i++)
     {
         for (int j = 0; j < WIDTH_MAP; j++)
         {
-            if (G.tabledraw[i][j] == 1)  s_map.setTextureRect(IntRect(0, 0, 64, 64)); //ПУСТОТА
-            if (G.tabledraw[i][j] == 0)  s_map.setTextureRect(IntRect(64, 0, 64, 64));//можно ходить
-            if ((G.tabledraw[i][j] == 2)) s_map.setTextureRect(IntRect(128, 0, 64, 64));//зеленая хрень
-            if ((G.tabledraw[i][j] == 3)) s_map.setTextureRect(IntRect(128+64, 0, 64, 64));//3d
+            if (G.tabledraw[i][j] == map_pixel::EMPTY)  s_map.setTextureRect(IntRect(0, 0, 64, 64)); //ПУСТОТА
+            if (G.tabledraw[i][j] == map_pixel::LOOP)  s_map.setTextureRect(IntRect(64, 0, 64, 64));//можно ходить
+            if ((G.tabledraw[i][j] == map_pixel::ENTRY)) s_map.setTextureRect(IntRect(128, 0, 64, 64));//зеленая хрень
+            if ((G.tabledraw[i][j] == map_pixel::THREE_D)) s_map.setTextureRect(IntRect(128 + 64, 0, 64, 64));//3d
 
             s_map.setPosition(j * 64, i * 64);
-           m_Window.draw(s_map);//рисуем квадратики на экран
+            m_Window.draw(s_map);//рисуем квадратики на экран
         }
     }
-   
-}
+    
 
+}
