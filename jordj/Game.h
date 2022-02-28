@@ -10,7 +10,7 @@ enum map_pixel
 	LOOP = 0,
 	ENTRY = 2,
 	EMPTY = 1,
-	THREE_D = 3
+	STONE = 3
 };
 
 enum move_direction
@@ -125,6 +125,7 @@ private:
 	Texture m_Texture;
 	int square;
 	void SetLoop(int x_prev, int y_prev, int x_curr, int y_curr);
+	bool DrStone(int x_curr, int y_curr, int x_prev, int y_prev);
 	void KostylInitCustomMap(LevelMap& m);
 
 
@@ -182,4 +183,5 @@ public:
 	bool loop = false;
 	Clock clock;
 	void Looser();
+	int l = 0;
 };

@@ -31,7 +31,7 @@ private:
     void update(float dtAsSeconds);
     void draw();
     Clock timerkey;
-    int l = 0;
+   
 public:
     // Конструктор движка
     Engine();

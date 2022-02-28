@@ -14,8 +14,8 @@ Engine::Engine()
 
 
     m_Window.create(VideoMode(resolution.x, resolution.y),
-        "Simple Game Engine",
-        Style::Fullscreen);
+        "Simple Game Engine"/*,*/
+        /*Style::Fullscreen*/);
 
 
     lastSize = m_Window.getSize();
@@ -85,7 +85,7 @@ void Engine::start()
         else
         {
             G.Looser();
-            l = 0;
+         
         }
 
     }
@@ -101,7 +101,10 @@ void Engine::input()
     {
         m_Window.close();
     }
-
+    if (Keyboard::isKeyPressed(Keyboard::R) )
+    {
+        G.Looser();
+    }
 
     //class game {
     //  int table[20][20];
@@ -162,32 +165,30 @@ void Engine::input()
         if (Keyboard::isKeyPressed(Keyboard::R) && dtime > 0.3)//reboot
         {
             G.Looser();
-            l = 0;
         }
     }
     else
     {
-
-
-        if (G.rem_pos.size() > l && dtime > 0.25)
-        {
-            if (G.rem_pos.size() != 0)
-            {
-                G.Loop(l);
-            }
-            l++;
-            timerkey.restart();
-        }
-        if (G.rem_pos.size() <= l)
-        {
-            l = 0;
-
-        }
         if (Keyboard::isKeyPressed(Keyboard::R) && dtime > 0.3)
         {
             G.Looser();
-            l = 0;
         }
+
+        if (G.rem_pos.size() > G.l && dtime > 0.25)
+        {
+            if (G.rem_pos.size() != 0)
+            {
+                G.Loop(G.l);
+            }
+            G.l++;
+            timerkey.restart();
+        }
+        if (G.rem_pos.size() <= G.l)
+        {
+            G.l = 0;
+
+        }
+        
     }
 
 }
@@ -200,7 +201,7 @@ void Engine::Background()
             if (G.tabledraw[i][j] == map_pixel::EMPTY)  s_map.setTextureRect(IntRect(0, 0, 64, 64)); //ПУСТОТА
             if (G.tabledraw[i][j] == map_pixel::LOOP)  s_map.setTextureRect(IntRect(64, 0, 64, 64));//можно ходить
             if ((G.tabledraw[i][j] == map_pixel::ENTRY)) s_map.setTextureRect(IntRect(128, 0, 64, 64));//зеленая хрень
-            if ((G.tabledraw[i][j] == map_pixel::THREE_D)) s_map.setTextureRect(IntRect(128 + 64, 0, 64, 64));//3d
+            //if ((G.tabledraw[i][j] == map_pixel::THREE_D)) s_map.setTextureRect(IntRect(128 + 64, 0, 64, 64));//3d
 
             s_map.setPosition(j * 64, i * 64);
             m_Window.draw(s_map);//рисуем квадратики на экран

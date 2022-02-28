@@ -35,9 +35,23 @@ void Game::SetLoop(int x_curr, int y_curr, int x_prev = 0, int y_prev = 0)
 		cout << 2;
 	}
 }
+ bool Game::DrStone(int x_curr, int y_curr, int x_prev = 0, int y_prev = 0)
+{
+	if (table[y_curr][x_curr] == 3)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	
+}
 
 void Game::KostylInitCustomMap(LevelMap& table)
 {
+	table.fill_rect(0, 0, 1, 5, map_pixel::STONE);
+	table.fill_rect(18, 0, 1, 5, map_pixel::STONE);
 	table.fill_rect(1, 1, 4, 4, map_pixel::ENTRY);
 	table.fill_rect(5, 3, 2, 1, map_pixel::LOOP);
 	table.fill_rect(6, 2, 3, 1, map_pixel::LOOP);
@@ -54,11 +68,17 @@ void Game::Leftkey()
 	{
 		Win = false;
 	}
-	else
+	else 
 	{
 		Rem_Pos("Left");
+		if (DrStone(bob_table_position.x - 1, bob_table_position.y) == true)
+		{
+			return;
+		}
+		
 		SetLoop(bob_table_position.x - 1, bob_table_position.y);
 		bob_table_position.x -= 1;
+		cout << -1;
 	}
 	//table[bob_table_position.x][bob_table_position.y] = -1;
 }
@@ -75,13 +95,17 @@ void Game::Rightkey()
 	else
 	{
 		Rem_Pos("Right");
+		if (DrStone(bob_table_position.x + 1, bob_table_position.y) == true)
+		{
+			return;
+		}
 		SetLoop(bob_table_position.x + 1, bob_table_position.y);
 		bob_table_position.x += 1;
 
 	}
 	//table[bob_table_position.x][bob_table_position.y] = -1;
 }
-
+		
 void Game::Upkey()
 {
 	//table[bob_table_position.x][bob_table_position.y] = 0;
@@ -174,6 +198,6 @@ void Game::Looser()
 	rem_pos.clear();
 	Win = true;
 	loop = false;
-
+	l = 0;
 
 }
