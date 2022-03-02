@@ -1,25 +1,14 @@
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <fstream>
+
 using namespace std;
 using namespace sf;
+#define HEIGHT_MAP 19//размер карты высота
+#define WIDTH_MAP 19//размер карты ширина
 
 
-enum map_pixel
-{
-	LOOP = 0,
-	ENTRY = 2,
-	EMPTY = 1,
-	STONE = 3
-};
-
-enum move_direction
-{
-	UP = 0,
-	DOWN = 1,
-	RIGHT = 2,
-	LEFT = 3
-};
 
 
 
@@ -30,7 +19,29 @@ enum move_direction
 //}
 //
 //// если сделать так, то для обращения вместо table[a][b] мы будем писать table[a*w+b]. 
+enum map_pixel
+{
+	LOOP = 1,
+	ENTRY = 2,
+	EMPTY = 0,
+	STONE = 3,
+	WIN = 4
+};
 
+enum move_direction
+{
+	UP = 0,
+	DOWN = 1,
+	RIGHT = 2,
+	LEFT = 3
+};
+enum levelname
+{
+	level1 = 1,
+	level2 = 2,
+	level3 = 3
+	
+};
 class LevelMap
 {
 public:
@@ -65,7 +76,6 @@ private:
 	map_pixel* table;
 	unsigned int width;
 	unsigned int height;
-
 	void generate_table(unsigned int w, unsigned int h, map_pixel filler)
 	{
 		if (table != nullptr)
@@ -92,6 +102,7 @@ private:
 
 
 	friend class Game;
+	
 	void fill_rect(unsigned int x, unsigned int y, unsigned int w, unsigned int h, map_pixel filler)
 	{
 		if (x + w >= width || y + h >= height)
@@ -107,6 +118,7 @@ private:
 			}
 		}
 	}
+	
 
 };
 
@@ -131,7 +143,7 @@ private:
 
 public:
 
-
+	friend class LevelMap;
 
 	Game();
 	Sprite getSprite();
@@ -151,9 +163,9 @@ public:
 
 	void update(float elapsedTime);
 
-	LevelMap table = LevelMap(18, 6);
-	LevelMap tabledraw = LevelMap(18, 7);
-
+	LevelMap table1 = LevelMap(WIDTH_MAP, HEIGHT_MAP);
+	//LevelMap tabledraw = LevelMap(WIDTH_MAP, HEIGHT_MAP);
+	
 	/*int table[6][18] = {
 		{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 ,1,1},
 		{ 1,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1 ,1,1},
@@ -172,7 +184,13 @@ public:
 	//	{ 1,3,3,3,3,1,1,1,1,1,1,1,1,1,3,3 ,3,1},
 	//	{ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 ,1,1},
 	//};
-	bool Win = true;
+	
+	struct Win     //Создаем структуру!
+	{
+		bool win;
+		bool N_level;
+	};
+	Win Win;
 	//extern vector<vector<int>> table(8, vector<int>(8, 0));
 	bool m_LeftPressed;
 	bool m_RightPressed;
@@ -183,5 +201,16 @@ public:
 	bool loop = false;
 	Clock clock;
 	void Looser();
+	void Readfromfile(string array);
 	int l = 0;
+	
+	int table[HEIGHT_MAP][WIDTH_MAP];
+	void fastcostyl();
+
+	void unload(string filename);
+
+	void load(string filename);
+
+	void Pobeda(int x_curr, int y_curr);
+	
 };

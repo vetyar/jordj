@@ -5,7 +5,7 @@ void Engine::draw()
     m_Window.clear(Color::White);
 
     // Отрисовываем фон
-    //Background();
+    /*Background();*/
     m_Window.draw(s_map);
     // И Боба
     m_Window.draw(G.getSprite());

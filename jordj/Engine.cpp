@@ -12,7 +12,6 @@ Engine::Engine()
     resolution.y = VideoMode::getDesktopMode().height;
 
 
-
     m_Window.create(VideoMode(resolution.x, resolution.y),
         "Simple Game Engine"/*,*/
         /*Style::Fullscreen*/);
@@ -41,7 +40,7 @@ Engine::Engine()
     map.loadFromImage(map_image);//заряжаем текстуру картинкой
 
     s_map.setTexture(map);//заливаем текстуру спрайтом
-    G.Win = true;
+    G.Win.win = true;
     G.loop = false;
 }
 
@@ -50,9 +49,9 @@ void Engine::start()
     // Расчет времени
     Clock clock;
 
-    while (m_Window.isOpen())
+    while (m_Window.isOpen() && G.Win.N_level == false)
     {
-        if (G.Win == true)
+        if (G.Win.win == true)
         {
             sf::Event event;
             while (m_Window.pollEvent(event))
@@ -94,7 +93,7 @@ void Engine::start()
 }
 void Engine::input()
 {
-
+    
     float dtime = timerkey.getElapsedTime().asSeconds();
     // Обрабатываем нажатие Escape
     if (Keyboard::isKeyPressed(Keyboard::Escape))
@@ -192,21 +191,21 @@ void Engine::input()
     }
 
 }
-void Engine::Background()
-{
-    for (int i = 0; i < HEIGHT_MAP; i++)
-    {
-        for (int j = 0; j < WIDTH_MAP; j++)
-        {
-            if (G.tabledraw[i][j] == map_pixel::EMPTY)  s_map.setTextureRect(IntRect(0, 0, 64, 64)); //ПУСТОТА
-            if (G.tabledraw[i][j] == map_pixel::LOOP)  s_map.setTextureRect(IntRect(64, 0, 64, 64));//можно ходить
-            if ((G.tabledraw[i][j] == map_pixel::ENTRY)) s_map.setTextureRect(IntRect(128, 0, 64, 64));//зеленая хрень
-            //if ((G.tabledraw[i][j] == map_pixel::THREE_D)) s_map.setTextureRect(IntRect(128 + 64, 0, 64, 64));//3d
-
-            s_map.setPosition(j * 64, i * 64);
-            m_Window.draw(s_map);//рисуем квадратики на экран
-        }
-    }
-    
-
-}
+//void Engine::Background()
+//{
+//    for (int i = 0; i < G.HEIGHT_MAP; i++)
+//    {
+//        for (int j = 0; j < G.WIDTH_MAP; j++)
+//        {
+//            if (G.tabledraw[i][j] == map_pixel::EMPTY)  s_map.setTextureRect(IntRect(0, 0, 64, 64)); //ПУСТОТА
+//            if (G.tabledraw[i][j] == map_pixel::LOOP)  s_map.setTextureRect(IntRect(64, 0, 64, 64));//можно ходить
+//            if ((G.tabledraw[i][j] == map_pixel::ENTRY)) s_map.setTextureRect(IntRect(128, 0, 64, 64));//зеленая хрень
+//            if ((G.tabledraw[i][j] == map_pixel::STONE)) s_map.setTextureRect(IntRect(128 + 64, 0, 64, 64));//3d
+//
+//            s_map.setPosition(j * 64, i * 64);
+//            m_Window.draw(s_map);//рисуем квадратики на экран
+//        }
+//    }
+//    
+//
+//}
