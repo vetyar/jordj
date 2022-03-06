@@ -11,8 +11,9 @@ Game::Game()
 	
 	bob_table_position.x = 1;
 	bob_table_position.y = 9;
-	m_Texture.loadFromFile("driver2.png");
+	m_Texture.loadFromFile("bob_right.png");
 	m_Sprite.setTexture(m_Texture);
+	m_Sprite.setScale(0.9, 0.9);
 	square = 64;
 	def_pos.x = bob_table_position.x = 1;
 	def_pos.y = bob_table_position.y = 9;
